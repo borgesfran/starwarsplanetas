@@ -1,5 +1,7 @@
 package com.starwars.planetaswiki.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Planeta {
 
     @Id
-    private Long id;
+    private String id;
 
     @Indexed(unique = true)
     private String nome;
@@ -26,11 +28,7 @@ public class Planeta {
 
     private String terreno;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Transient
     private int quantidadeAparicoes;
-
-    public Planeta quantidadeAparicoes(int quantidade){
-        this.quantidadeAparicoes = quantidade;
-        return this;
-    }
 }
