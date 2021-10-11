@@ -10,7 +10,6 @@ import com.starwars.planetaswiki.utils.ValidadorRequisicao;
 import feign.FeignException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PlanetaService {
 
-    //todo ajustar arquivos q subiram pro repositório: remover o .gitignore, help.md,mvnw,mvnw.cmd
     private final PlanetaRepository planetaRepository;
-    private final ObjectProvider<SwapiClient> swapiClient;
+    private final SwapiClient swapiClient;
 
     public Response listarTodos(){
         List<Planeta> planetas = planetaRepository.findAll();
@@ -35,12 +33,12 @@ public class PlanetaService {
 
     public Response buscarPorNome(String nome){
         return planetaRepository.findPlanetaByNome(nome).map(Response::comSucesso).orElseThrow(
-                ()->new ServiceException("Planeta com nome " + nome + "inexistente no banco"));
+                ()->new ServiceException("Planeta com nome " + nome + " inexistente no banco"));
     }
 
     public Response buscarPorId(String id){
         return planetaRepository.findById(id).map(Response::comSucesso).orElseThrow(
-                ()->new ServiceException("Planeta com o id " + id + "inexistente no banco"));
+                ()->new ServiceException("Planeta com o id " + id + " inexistente no banco"));
     }
 
     public Response salvar(Planeta planeta){
@@ -67,9 +65,9 @@ public class PlanetaService {
         return Response.comSucesso(null);
     }
 
-    public Planeta buscarQuantidadeAparicoesEmFilmes(Planeta planeta){
+    private Planeta buscarQuantidadeAparicoesEmFilmes(Planeta planeta){
         try {
-            PlanetaDto planetaDto = swapiClient.getObject().buscarFilmesAparicoes(planeta.getNome());
+            PlanetaDto planetaDto = swapiClient.buscarFilmesAparicoes(planeta.getNome());
 
             if(!planetaDto.getFilms().isEmpty())
                 planeta.setQuantidadeAparicoes(planetaDto.getFilms().size());

@@ -3,7 +3,6 @@ package com.starwars.planetaswiki.controller;
 import com.starwars.planetaswiki.model.Planeta;
 import com.starwars.planetaswiki.model.Response;
 import com.starwars.planetaswiki.service.PlanetaService;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,13 +28,13 @@ class PlanetaControllerTest {
 
     Planeta planeta;
 
-    @Before
+    @BeforeEach
     public void init(){
         planeta = new Planeta("x1","Tatooine","Árido","Deserto",5);
     }
 
     @Test
-    void aoAdicionarPlaneta_RetornarHttpStatusCreated(){
+    public void aoAdicionarPlaneta_RetornarHttpStatusCreated(){
         Response response = Response.comSucesso(planeta);
 
         Mockito.when(planetaService.salvar(planeta)).thenReturn(response);
@@ -48,7 +47,7 @@ class PlanetaControllerTest {
     }
 
     @Test
-    void aoAtualizarPlaneta_RetornarSucessoNaRequisicao(){
+    public void aoAtualizarPlaneta_RetornarSucessoNaRequisicao(){
         Response response = Response.comSucesso(planeta);
 
         Mockito.when(planetaService.atualizar(planeta)).thenReturn(response);
@@ -61,8 +60,8 @@ class PlanetaControllerTest {
     }
 
     @Test
-    void aoListarPlanetasSalvos_RetornarSucessoNaRequisicao(){
-        List<Planeta> planetas = new ArrayList<>(Arrays.asList(planeta));
+    public void aoListarPlanetasSalvos_RetornarSucessoNaRequisicao(){
+        List<Planeta> planetas = new ArrayList<>(Collections.singletonList(planeta));
         Response response =Response.comSucesso(planetas);
 
         Mockito.when(planetaService.listarTodos()).thenReturn(response);
@@ -75,7 +74,7 @@ class PlanetaControllerTest {
     }
 
     @Test
-    void aoBuscarPlanetaPorNome_RetornarSucessoNaRequisicao(){
+    public void aoBuscarPlanetaPorNome_RetornarSucessoNaRequisicao(){
         Response response = Response.comSucesso(planeta);
         String nome = "Tatooine";
 
@@ -89,7 +88,7 @@ class PlanetaControllerTest {
     }
 
     @Test
-    void aoBuscarPlanetaPorId_RetornarSucessoNaRequisicao(){
+    public void aoBuscarPlanetaPorId_RetornarSucessoNaRequisicao(){
         Response response = Response.comSucesso(planeta);
         String id = "x1";
 
@@ -103,7 +102,7 @@ class PlanetaControllerTest {
     }
 
     @Test
-    void aoRemoverPlaneta_RetornarSucessoNaRequisição(){
+    public void aoRemoverPlaneta_RetornarSucessoNaRequisição(){
         Response response = Response.comSucesso(null);
         String id = "x1";
 
