@@ -28,7 +28,7 @@ public class PlanetaController {
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "500", description = "Erro durante a requisição")
     })
-    public ResponseEntity<Response> adicionarPlaneta(@RequestBody @Valid Planeta planeta){
+    public ResponseEntity<Response> adicionarPlaneta(@RequestBody Planeta planeta){
         Response planetaSalvo = planetaService.salvar(planeta);
         return new ResponseEntity<>(planetaSalvo, HttpStatus.CREATED);
     }
@@ -36,14 +36,14 @@ public class PlanetaController {
     @PutMapping
     @Operation(summary = "Atualize um planeta existente no banco")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Novo registro criado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Sucesso na requisição"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "404", description = "Registro não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro durante a requisição")
     })
     public ResponseEntity<Response> atualizarPlaneta(@RequestBody @Valid Planeta planeta){
         Response planetaAtualizado = planetaService.atualizar(planeta);
-        return new ResponseEntity<>(planetaAtualizado, HttpStatus.CREATED);
+        return ResponseEntity.ok(planetaAtualizado);
     }
 
     @GetMapping
