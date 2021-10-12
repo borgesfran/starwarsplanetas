@@ -9,6 +9,7 @@
 - OpenFeign
 - Swagger
 - Lombok
+- MongoDB
 
 #### :wrench: Pré-requisitos para rodar o serviço
 1. Para rodar a aplicação tenha instalado na sua máquina o MongoDB.
