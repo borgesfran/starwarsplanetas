@@ -5,7 +5,6 @@
 #### :books: Linguagens, dependências e libs utilizadas
 - Java 8
 - Spring
-- Hibernate
 - OpenFeign
 - Swagger
 - Lombok
