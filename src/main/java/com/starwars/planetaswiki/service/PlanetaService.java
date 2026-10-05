@@ -11,8 +11,10 @@ import feign.FeignException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -41,12 +43,14 @@ public class PlanetaService {
                 ()->new ServiceException("Planeta com o id " + id + " inexistente no banco"));
     }
 
+    @Transactional
     public Response salvar(Planeta planeta){
         ValidadorRequisicao.validarPlaneta(planeta);
         planeta = buscarQuantidadeAparicoesEmFilmes(planeta);
         return Response.comSucesso(planetaRepository.save(planeta));
     }
 
+    @Transactional
     public Response atualizar(Planeta planeta){
         if(planeta.getId() == null)
             throw new ServiceException("Id do Planeta a ser atualizado não foi informado.");
@@ -59,10 +63,18 @@ public class PlanetaService {
         throw  new ServiceException("Planeta com o id " + planeta.getId() + "inexistente no banco");
     }
 
+    @Transactional
     public Response remover(String id){
-        Planeta planeta = (Planeta) this.buscarPorId(id).getDados();
-        planetaRepository.delete(planeta);
-        return Response.comSucesso(null);
+        try{
+            Optional<Planeta> planeta = planetaRepository.findById(id);
+            if(!planeta.isPresent()){
+                throw new ServiceException("Planeta com o id " + id + " inexistente no banco");
+            }
+            planetaRepository.delete(planeta.get());
+            return Response.comSucesso(null);
+        }catch (Exception e){
+            return Response.comErro("Erro ao remover planeta. Detalhes: " + e.getMessage());
+        }
     }
 
     private Planeta buscarQuantidadeAparicoesEmFilmes(Planeta planeta){
